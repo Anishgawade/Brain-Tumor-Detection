@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+backend/.venv/
+backend/__pycache__/
+backend/model/
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# DS_Store
+.DS_Store
+
+# Large files / Datasets
+brain-tumor-mri-dataset/
+models/*.h5
+models/*.pth
+models/*.keras
+
+# Environment files
+.env
+.venv/
+env/
+venv/
+ENV/
+frontend/.env
+backend/.env
+
+# Local IDE folders
+.vscode/
+.idea/
