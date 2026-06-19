@@ -21,7 +21,7 @@ from model.loader import (
 _HISTORY: List[Dict] = []
 # _GRAD_MODEL = None
 
-print("[predict] Starting GradCAM")
+# print("[predict] Starting GradCAM")
 # ── Grad-CAM ────────────────────────────────────────────────────────────────────
 
 # def _heuristic_tumor_heatmap(img_array: np.ndarray) -> np.ndarray:
@@ -239,7 +239,7 @@ print("[predict] Starting GradCAM")
 
 
 # ── Public API ──────────────────────────────────────────────────────────────────
-print("[predict] Starting inference")
+# print("[predict] Starting inference")
 def predict_image(file_path: str) -> Dict:
     """
     Run inference + Grad-CAM on the given file path.
@@ -266,7 +266,7 @@ def predict_image(file_path: str) -> Dict:
     img_array = preprocess_image(file_path)
     preds = model.predict(img_array, verbose=0)
     label, confidence, subtype, all_probs, tumor_info = decode_prediction(preds)
-print("[predict] Inference completed")
+# print("[predict] Inference completed")
     # Grad-CAM (best-effort)
     # gradcam_data = None
     # try:
@@ -290,7 +290,7 @@ print("[predict] Inference completed")
     # _HISTORY.append(record)
     # return record
 
-print("[predict] GradCAM completed")
+# print("[predict] GradCAM completed")
 def get_history(limit: int = 50) -> List[Dict]:
     """Return the most-recent predictions first (without full gradcam base64 to keep response light)."""
     return [

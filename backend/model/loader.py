@@ -154,13 +154,44 @@ def load_model_once() -> None:
 
         try:
             import tensorflow as tf
-            print(f"[loader] Loading model from: {model_path}")
-            _model = tf.keras.models.load_model(model_path, compile=False)
-            print(f"[loader] Model loaded successfully. Input shape: {_model.input_shape}")
+            import os
+
+            print("=" * 60)
+            print("[loader] BEFORE load_model")
+            print(f"[loader] Model path: {model_path}")
+            print(f"[loader] File exists: {os.path.exists(model_path)}")
+
+            if os.path.exists(model_path):
+                print(f"[loader] File size: {os.path.getsize(model_path) / (1024 * 1024):.2f} MB")
+
+            print(f"[loader] TensorFlow version: {tf.__version__}")
+            print("=" * 60)
+
+            _model = tf.keras.models.load_model(
+                model_path,
+                compile=False
+            )
+
+            print("=" * 60)
+            print("[loader] AFTER load_model")
+            print(f"[loader] Model loaded successfully")
+            print(f"[loader] Input shape: {_model.input_shape}")
+            print("=" * 60)
+
             _model_error = None
+
         except Exception as exc:
-            _model_error = f"Failed to load model: {exc}"
-            print(f"[loader] ERROR: {_model_error}")
+            import traceback
+
+            print("=" * 60)
+            print("[loader] MODEL LOAD FAILED")
+            print(f"[loader] Exception type: {type(exc).__name__}")
+            print(f"[loader] Exception message: {str(exc)}")
+            print("[loader] Full traceback:")
+            traceback.print_exc()
+            print("=" * 60)
+
+            _model_error = f"Failed to load model: {str(exc)}"
 
 
 def get_model():
