@@ -41,9 +41,16 @@ async def predict(file: UploadFile = File(...)):
             tmp_path = tmp.name
 
         result = predict_image(tmp_path)
-        
+
+        if result is None:
+            raise HTTPException(
+                status_code=500,
+                detail="Prediction service returned None"
+            )
+
         # Add performance metadata
         end_time = time.perf_counter()
+
         result["meta"] = {
             "inference_time_ms": round((end_time - start_time) * 1000, 2),
             "engine": "TensorFlow 2.16+ (Keras 3)",

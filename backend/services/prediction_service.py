@@ -266,29 +266,20 @@ def predict_image(file_path: str) -> Dict:
     img_array = preprocess_image(file_path)
     preds = model.predict(img_array, verbose=0)
     label, confidence, subtype, all_probs, tumor_info = decode_prediction(preds)
-# print("[predict] Inference completed")
-    # Grad-CAM (best-effort)
-    # gradcam_data = None
-    # try:
-    #     heatmap = _generate_gradcam(img_array, model)
-    #     gradcam_data = _overlay_heatmap(heatmap, file_path)
-    # except Exception as exc:
-    #     print(f"[predict] Grad-CAM skipped: {exc}")
+    record = {
+        "id": len(_HISTORY) + 1,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "filename": os.path.basename(file_path),
+        "prediction": label,
+        "subtype": subtype,
+        "confidence": float(confidence),
+        "all_probabilities": all_probs,
+        "tumor_info": tumor_info
+    }
 
-    # record = {
-    #     "id": len(_HISTORY) + 1,
-    #     "timestamp": datetime.now(timezone.utc).isoformat(),
-    #     "filename": os.path.basename(file_path),
-    #     "prediction": label,
-    #     "subtype": subtype,
-    #     "confidence": round(confidence, 6),
-    #     "all_probabilities": all_probs,
-    #     "tumor_info": tumor_info,
-    #     "gradcam": gradcam_data,
-    #     "tumor_volume_mm3": gradcam_data.get("tumor_volume_mm3") if gradcam_data else None
-    # }
-    # _HISTORY.append(record)
-    # return record
+    _HISTORY.append(record)
+
+    return record
 
 # print("[predict] GradCAM completed")
 def get_history(limit: int = 50) -> List[Dict]:
