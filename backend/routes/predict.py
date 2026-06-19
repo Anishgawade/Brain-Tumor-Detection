@@ -2,6 +2,7 @@
 
 import os
 import tempfile
+import traceback
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
@@ -52,8 +53,17 @@ async def predict(file: UploadFile = File(...)):
 
     except RuntimeError as exc:
         raise HTTPException(status_code=503, detail=str(exc))
+    # except Exception as exc:
+    #     raise HTTPException(status_code=500, detail=f"Unexpected error: {str(exc)}")
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(exc)}")
+        print("========== PREDICTION ERROR ==========")
+        traceback.print_exc()
+        print("======================================")
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(exc)
+        )
     finally:
         if tmp_path and os.path.exists(tmp_path):
             try:
